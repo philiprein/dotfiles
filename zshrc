@@ -10,6 +10,8 @@ function mkcd() {
 
 # Prompt
 
-PROMPT='%1~ 👉%  '
+PROMPT='%1~ %# '
+# PROMPT='%1~ 👉%  '
+
 
 
