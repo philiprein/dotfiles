@@ -145,5 +145,5 @@ done
 
 echo "Applying macOS settings..."
 
-. "$DOTFILES_DIR/macos/settings.zsh"
-. "$DOTFILES_DIR/macos/dock.zsh"
+. "$DOTFILES_DIR/macos/defaults.sh"
+. "$DOTFILES_DIR/macos/dock.sh"
