@@ -14,7 +14,7 @@ The Xcode Command Line Tools includes `git` (not available on stock macOS). Now 
 1. Install this repo with `curl` available:
 
 ```zsh
-bash -c "`curl -fsSL https://raw.githubusercontent.com/philiprein/dotfiles/main/remote_setup.sh`"
+zsh -c "`curl -fsSL https://raw.githubusercontent.com/philiprein/dotfiles/main/remote_setup.sh`"
 ```
 
 This will clone or download this repo to `~/.dotfiles` (depending on the availability of `git`, `curl` or `wget`).
