@@ -9,11 +9,11 @@ function is-executable() {
   return $( whence $1 &> /dev/null )
 }
 
-if is_executable "git"; then
+if is-executable "git"; then
   CMD="git clone $SOURCE $TARGET"
-elif is_executable "curl"; then
+elif is-executable "curl"; then
   CMD="curl -#L $TARBALL | $TAR_CMD"
-elif is_executable "wget"; then
+elif is-executable "wget"; then
   CMD="wget --no-check-certificate -O - $TARBALL | $TAR_CMD"
 fi
 
