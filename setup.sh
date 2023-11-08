@@ -22,12 +22,12 @@ export HOMEBREW_CASK_OPTS="--no-quarantine"
 
 # Function to determine if the provided command is executable
 function is-executable() {
-  return $( whence $1 &> /dev/null )
+  return $(whence $1 &>/dev/null)
 }
 
 # Function to determine if the underlying OS is macOS based on the presence of a command specific to macOS, 'sw_vers'
 function is-macos() {
-  return $( whence sw_vers &> /dev/null )
+  return $(whence sw_vers &>/dev/null)
 }
 
 # Robust symlinking
@@ -128,13 +128,13 @@ for item in config/*; do
     continue
     ;;
   *)
-    symlink "$DOTFILES_DIR/$item" "$HOME/$item"
+    symlink "$DOTFILES_DIR/$item" "$HOME/$(basename $item)"
     ;;
   esac
 done
 
 echo "Adding executables to ~/.bin/..."
-mkdir -p "$bindir"
+mkdir -p "$BIN_DIR"
 for item in bin/*; do
   symlink "$DOTFILES_DIR/$item" "$BIN_DIR/$(basename $item)"
 done
