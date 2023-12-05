@@ -84,45 +84,11 @@ else
 fi
 
 # ###########################################################
-# Install Homebrew
-# ###########################################################
-
-echo "Installing Homebrew..."
-if ! is-executable brew; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  if [[ $? != 0 ]]; then
-    error "Unable to install Homebrew, exiting..."
-    exit 2
-  else
-    echo 'Homebrew installed successfully.'
-  fi
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zprofile
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  brew analytics off
-else
-  echo "Skipping install of Homebrew. It is already installed."
-fi
-echo "Updating Homebrew..."
-brew update && brew upgrade
-brew doctor
-
-# ###########################################################
-# Install Homebrew Formulae, Casks, Mac App Store Apps
-# ###########################################################
-
-echo "Installing Homebrew formulae, casks and Mac App Store apps..."
-brew bundle --file=$(DOTFILES_DIR)/install/Brewfile --verbose
-
-echo "Cleaning up Homebrew..."
-brew cleanup --force &>/dev/null
-rm -rf /Library/Caches/Homebrew/* &>/dev/null
-
-# ###########################################################
 # Symlinking Dotfiles
 # ###########################################################
 
 echo "Creating symlinks..."
-for item in config/*; do
+for item in "$DOTFILES_DIR/config/*"; do
   case "$item" in
   . | .. | .git)
     continue
@@ -139,11 +105,3 @@ for item in bin/*; do
   symlink "$DOTFILES_DIR/$item" "$BIN_DIR/$(basename $item)"
 done
 
-# ###########################################################
-# MacOS Settings
-# ###########################################################
-
-echo "Applying macOS settings..."
-
-. "$DOTFILES_DIR/macos/defaults.sh"
-. "$DOTFILES_DIR/macos/dock.sh"
