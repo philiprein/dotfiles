@@ -1,73 +1,84 @@
 #!/bin/zsh
 
-# ###########################################################
-# Preparations
-# ###########################################################
-
-# Set error handling
 set -eo pipefail
 
-# ###########################################################
-# Set variables
-# ###########################################################
+
+### variables
 
 DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_REPO_URL="https://github.com/philiprein/dotfiles.git"
 BIN_DIR="$HOME/.bin"
 
-# ###########################################################
-# Define Functions
-# ###########################################################
 
-# Function to determine if the provided command is executable
-function is-executable() {
-  return $(whence $1 &>/dev/null)
-}
+### functions
 
-# Robust symlinking
+# function for robust symlinking
 function symlink() {
   src="$1"
   dest="$2"
 
-  # Check if destination already exists
+  # check if destination already exists
   if [ -e "$dest" ]; then
-    # Check if destination is a symbolic link
+    # check if destination is a symbolic link
     if [ -L "$dest" ]; then
-      # Check if symbolic link is broken
+      # check if symbolic link is broken
       if [ ! -e "$dest" ]; then
-        echo "Removing broken symlink at $dest"
+        # symlink is broken
+        echo "Removing broken symlink at $dest..."
         rm "$dest"
       else
-        # Already symlinked -- I'll assume correctly.
+        # symlink already exists
+        echo "$src is already symlinked to $dest. Skipping..."
         return 0
       fi
     else
-      # Rename files with a ".bak" extension.
-      echo "$dest already exists, renaming to $dest.bak"
+      # Rename files with a ".bak" extension
+      echo "$dest already exists, renaming to $dest.bak..."
       mv -f "$dest" "$dest.bak"
     fi
   fi
+  echo "Symlinking $src to $dest..."
   ln -sf "$src" "$dest"
 }
 
-# ###########################################################
-# Symlinking Dotfiles
-# ###########################################################
 
+### script
+
+# check if git is installed
+if ! whence -p git &>/dev/null; then
+  echo "git is not installed. Exiting..."
+  exit 1
+fi
+
+# install dotfiles using git
+if [ -d "$DOTFILES_DIR/.git" ]; then
+  echo "Updating dotfiles..."
+  cd "$DOTFILES_DIR"
+  git pull --quiet --rebase origin main || exit 1
+else
+  echo "Downloading dotfiles..."
+  rm -rf "$DOTFILES_DIR"
+  git clone --quiet --depth=1 "$DOTFILES_REPO_URL" "$DOTFILES_DIR"
+fi
+
+cd "$DOTFILES_DIR"
+
+# create symlinks
 echo "Creating symlinks..."
-for item in "$DOTFILES_DIR/config/*"; do
+for item in .*; do
   case "$item" in
   . | .. | .git)
     continue
     ;;
   *)
-    symlink "$DOTFILES_DIR/$item" "$HOME/$(basename $item)"
+    symlink "$DOTFILES_DIR/$item" "$HOME/$item"
     ;;
   esac
 done
 
+# add executeables
 echo "Adding executables to ~/.bin/..."
 mkdir -p "$BIN_DIR"
-for item in bin/*; do
+for item in bin/* ; do
   symlink "$DOTFILES_DIR/$item" "$BIN_DIR/$(basename $item)"
 done
-
