@@ -1,7 +1,8 @@
 ### Internal Utility Functions ###
+
 # Returns whether the given command is executable or aliased.
 _has() {
-  return $( whence $1 &> /dev/null )
+  return $( whence $1 &>/dev/null )
 }
 
 
@@ -11,6 +12,7 @@ alias trail='<<<${(F)path}'
 
 # eza is a fancy replacement for ls
 if _has eza ; then
+  alias l='ls -lAFh'
   alias ls='eza -laFh --git'
   alias eza='eza -laFh --git'
 fi
@@ -57,4 +59,4 @@ _force_prepend_to_path() {
   path=($1 ${(@)path:#$1})
 }
 
-_append_to_path ~/.bin
+_append_to_path "${HOME}/.bin"
