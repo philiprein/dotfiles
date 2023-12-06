@@ -6,10 +6,10 @@ These are my dotfiles. I mostly use them on macOS and Linux but to keep the envi
 1. Install this repo with `curl` available:
 
 ```zsh
-zsh -c "`curl -fsSL https://raw.githubusercontent.com/philiprein/dotfiles/main/remote_setup.sh`"
+zsh -c "`curl -fsSL https://raw.githubusercontent.com/philiprein/dotfiles/main/setup.sh`"
 ```
 
-This will clone or download this repo to `~/.dotfiles` (depending on the availability of `git`, `curl` or `wget`).
+This will clone the repo to `~/.dotfiles`.
 
 1. Alternatively, clone manually into the desired location:
 
