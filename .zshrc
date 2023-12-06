@@ -60,3 +60,6 @@ _force_prepend_to_path() {
 }
 
 _append_to_path "${HOME}/.bin"
+
+# Can also be used to deduplicate $PATH
+#typeset -U path
